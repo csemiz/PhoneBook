@@ -22,4 +22,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PhoneBookDataLayer\PhoneBookDataLayer.csproj" />
+    <ProjectReference Include="..\PhoneBookEntityLayer\PhoneBookEntityLayer.csproj" />
+  </ItemGroup>
+
 </Project>
