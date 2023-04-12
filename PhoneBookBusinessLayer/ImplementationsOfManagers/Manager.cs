@@ -72,7 +72,7 @@ namespace PhoneBookBusinessLayer.ImplementationsOfManagers
                 var fltr = _mapper.Map<Expression<Func<TViewModel, bool>>, Expression<Func<TModel, bool>>>(filter);
 
 
-               var data = _repo.GetAll(fltr, _includeRelationalTables.Split(","));
+               var data = _repo.GetAll(fltr, _includeRelationalTables?.Split(","));
 
                 ICollection<TViewModel> dataList =
                     _mapper.Map<IQueryable<TModel>, ICollection<TViewModel>>(data);
@@ -93,7 +93,7 @@ namespace PhoneBookBusinessLayer.ImplementationsOfManagers
             {
                 var fltr = _mapper.Map<Expression<Func<TViewModel, bool>>, Expression<Func<TModel, bool>>>(filter);
 
-                var data = _repo.GetByConditions(fltr, _includeRelationalTables.Split(","));
+                var data = _repo.GetByConditions(fltr, _includeRelationalTables?.Split(","));
                 if (data==null)
                 {
                     return new DataResult<TViewModel>(false, null);

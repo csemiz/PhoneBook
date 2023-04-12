@@ -1,0 +1,42 @@
+﻿@model MemberPhoneViewModel
+@{
+    ViewData["Title"] = "AddPhone";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <form  asp-controller="Home" asp-action="AddPhone" method="post">
+            <div class="text-danger" asp-validation-summary="All"> </div>
+
+            <div class="form-group">
+                <label>Telefon Tipi:</label>
+                <select class="form-control" asp-for="PhoneTypeId">
+
+                    @foreach (PhoneTypeViewModel item in ViewBag.PhoneTypes)
+                    {
+                     <option value="@item.Id">@item.Name</option>   
+                    }
+                </select>
+            </div><br />
+
+            <div class="form-group">
+                <label>İsim Soyisim:</label>
+                <input type="text" class="form-control" asp-for="FriendNameSurname" required />
+            </div><br />
+
+            <div class="form-group">
+                <label>Telefon:</label>
+                <input type="text" class="form-control" asp-for="Phone" required />
+            </div><br />
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">KAYDET</button>
+            </div><br />
+            <input type="hidden" asp-for="MemberId" />
+
+        </form>
+
+    </div>
+</div>
+

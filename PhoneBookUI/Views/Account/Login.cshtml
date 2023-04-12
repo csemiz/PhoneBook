@@ -7,6 +7,29 @@
 <h3>Hoşgeldiniz...Sisteme Giriş Yapabilirsiniz </h3>
 
 <div class="col-md-6 offset-3">
+    @if (TempData["RegisterSuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @* <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>*@
+            <i class="bi bi-check-circle-fill"></i>
+            @TempData["RegisterSuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+    }
+
+    @if (ViewBag.LoginErrorMsg != null)
+    {
+        <div class="alert alert-success alert-danger fade show" role="alert">
+            @* <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>*@
+            <i class="bi bi-check-circle-fill"></i>
+            @ViewBag.LoginErrorMsg
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+    }
+
+
     <form asp-controller="Account" asp-action="Login" method="post">
 
         <div class="text-danger" asp-validation-summary="All">   </div>

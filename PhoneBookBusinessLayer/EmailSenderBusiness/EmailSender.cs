@@ -52,6 +52,13 @@ namespace PhoneBookBusinessLayer.EmailSenderBusiness
                     mail.CC.Add(item);
                 }
 
+                if (CCManagers!=null && CCManagers.Length > 0)
+                {
+                    foreach (var item in CCManagers.Split(","))
+                    {
+                        mail.CC.Add(item);
+                    }
+                }
 
                 mail.Subject = message.Subject;
                 mail.Body = message.Body;

@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using PhoneBookBusinessLayer.EmailSenderBusiness;
 using PhoneBookBusinessLayer.InterfacesOfManagers;
 using PhoneBookEntityLayer.ViewModels;
 using PhoneBookUI.Models;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -44,13 +49,13 @@ namespace PhoneBookUI.Controllers
                 //ekleme islemleri yapılacaktır.
 
                 //1)Ayni emailden tekrar kayit olamaz!
-                //var isSameEmail = _memberManager.GetByConditions(x => x.Email.ToLower() == model.Email.ToLower());
+                var isSameEmail = _memberManager.GetByConditions(x => x.Email.ToLower() == model.Email.ToLower()).Data;
 
-                //if (isSameEmail != null)
-                //{
-                //    ModelState.AddModelError("", "Dikkat bu kullanıcı sistemde zaten mevcuttur !");
-                //    return View(model);
-                //}
+                if (isSameEmail != null)
+                {
+                    ModelState.AddModelError("", "Dikkat bu kullanıcı sistemde zaten mevcuttur !");
+                    return View(model);
+                }
                 MemberViewModel member = new MemberViewModel()
                 {
                     Email = model.Email,
@@ -85,7 +90,7 @@ namespace PhoneBookUI.Controllers
 
 
                     //login sayfasina yonlendirilecek
-                    //buraya kaydiniz gerceklesti yazilacak
+                    TempData["RegisterSuccessMessage"] = $"{member.Name} {member.Surname} kaydınız gerçekleşti. Giriş yapabilirsiniz.";
                     return RedirectToAction("Login", "Account", new { email = model.Email });
                 }
                 else
@@ -113,10 +118,59 @@ namespace PhoneBookUI.Controllers
                 };
                 return View(model);
             }
-            
+
             return View(new LoginViewModel());
         }
 
+        [HttpPost]
+        public IActionResult Login(LoginViewModel model)//Girisin arkaplanı
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.LoginErrorMsg = $"Gerekli alanları doldurunuz !";
+                    return View(model);
+                }
+
+                var user = _memberManager.GetById(model.Email).Data;
+
+                if (user == null)
+                {
+                    ViewBag.LoginErrorMsg = $"Kullanıcı adınız ya da şifrenizi doğru yazdığınızdan emin olunuz!";
+                    return View(model);
+                }
+                var passwordCompare = VerifyPassword(model.Password, user.PasswordHash, user.Salt);
+                if (!passwordCompare)
+                {
+                    ViewBag.LoginErrorMsg = $"Kullanıcı adınız ya da şifrenizi doğru yazdığınızdan emin olunuz!";
+                    return View(model);
+                }
+                //Giris yapilacak.
+                //Bu kisinin bilgilerini(email) oturum(session) cookie olarak kayit edecegiz.
+                var identity = new ClaimsIdentity(IdentityConstants.ApplicationScheme);
+                identity.AddClaim(new(ClaimTypes.Name, user.Email));
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+                //Ardindan Home Index sayfasina yonlendirecegiz.
+                return RedirectToAction("Index", "Home");
+
+            }
+            catch (Exception ex)
+            {
+                //ex loglanacak suan development old icin mesajini yazdirdik.
+                ViewBag.LoginErrorMsg = $"Beklenmedik bir hata oluştu! {ex.Message}";
+                return View(model);
+            }
+
+        }
+
+        [Authorize]
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
         private string HashPasword(string password, out byte[] salt)
         {
             salt = RandomNumberGenerator.GetBytes(keySize);

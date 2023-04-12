@@ -19,7 +19,7 @@ namespace PhoneBookEntityLayer.Entities
 
         [Required]
         [StringLength(13, MinimumLength = 13)]
-        public int Phone { get; set; }//+905345442053
+        public string Phone { get; set; }//+905345442053
         
         public string MemberId { get; set; }//Foreign Key
 

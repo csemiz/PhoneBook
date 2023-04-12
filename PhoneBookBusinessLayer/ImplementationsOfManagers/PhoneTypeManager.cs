@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PhoneBookBusinessLayer.ImplementationsOfManagers
 {
-    internal class PhoneTypeManager:Manager<PhoneTypeViewModel,PhoneType,byte>, IPhoneTypeManager
+    public class PhoneTypeManager:Manager<PhoneTypeViewModel,PhoneType,byte>, IPhoneTypeManager
     {
         public PhoneTypeManager(IPhoneTypeRepository repo, IMapper mapper):base(repo, mapper, null)
         {
