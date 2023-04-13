@@ -27,8 +27,24 @@
 
             <div class="form-group">
                 <label>Telefon:</label>
-                <input type="text" class="form-control" asp-for="Phone" required />
-            </div><br />
+                <div class="form-group row">
+                    <label>Telefon:</label>
+                    <div class="col-3">
+                        <select class="form-control" asp-for="CountryCode">
+                            <option value="+01">+01 USA</option>
+                            <option value="+33">+33 FR</option>
+                            <option value="+44">+44 UK</option>
+                            <option value="+49">+49 DE</option>
+                            <option value="+90">+90 TR</option>
+                        </select>
+                    </div>
+                    <div class="col-9">
+
+                        <input type="text" class="form-control" asp-for="Phone"
+                               required />
+                    </div>
+                </div> <br />
+             
 
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">KAYDET</button>
