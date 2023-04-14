@@ -34,7 +34,8 @@ namespace PhoneBookBusinessLayer.ImplementationsOfManagers
 
                 TViewModel datamodel = _mapper.Map<TModel, TViewModel>(tmodel);
 
-                return result > 0 ? new DataResult<TViewModel>(success: true, message: "Ekleme işlemi başarılıdır!", data: model) : new DataResult<TViewModel>(model, "Ekleme BAŞARISIZ!!", false);
+                return result > 0 ? new DataResult<TViewModel>(success: true, message: "Ekleme işlemi başarılıdır!",
+                    data: datamodel) : new DataResult<TViewModel>(model, "Ekleme BAŞARISIZ!!", false);
 
             }
             catch (Exception)
@@ -72,12 +73,12 @@ namespace PhoneBookBusinessLayer.ImplementationsOfManagers
                 var fltr = _mapper.Map<Expression<Func<TViewModel, bool>>, Expression<Func<TModel, bool>>>(filter);
 
 
-               var data = _repo.GetAll(fltr, _includeRelationalTables?.Split(","));
+                var data = _repo.GetAll(fltr, _includeRelationalTables?.Split(","));
 
                 ICollection<TViewModel> dataList =
                     _mapper.Map<IQueryable<TModel>, ICollection<TViewModel>>(data);
 
-                return new DataResult<ICollection<TViewModel>>(dataList,"",true);
+                return new DataResult<ICollection<TViewModel>>(dataList, "", true);
 
             }
             catch (Exception)
@@ -94,7 +95,7 @@ namespace PhoneBookBusinessLayer.ImplementationsOfManagers
                 var fltr = _mapper.Map<Expression<Func<TViewModel, bool>>, Expression<Func<TModel, bool>>>(filter);
 
                 var data = _repo.GetByConditions(fltr, _includeRelationalTables?.Split(","));
-                if (data==null)
+                if (data == null)
                 {
                     return new DataResult<TViewModel>(false, null);
                 }
@@ -123,7 +124,7 @@ namespace PhoneBookBusinessLayer.ImplementationsOfManagers
                 var data = _repo.GetById(id);
                 if (data == null)
                 {
-                    return new DataResult<TViewModel>(null,"Kayıt bulunamadı",false);
+                    return new DataResult<TViewModel>(null, "Kayıt bulunamadı", false);
                 }
 
                 var dataModel = _mapper.Map<TModel, TViewModel>(data);

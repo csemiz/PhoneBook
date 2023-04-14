@@ -6,53 +6,121 @@
 
 <div class="row">
     <div class="col-md-8 offset-2">
-        <form  asp-controller="Home" asp-action="AddPhone" method="post">
-            <div class="text-danger" asp-validation-summary="All"> </div>
+        <form asp-controller="Home" asp-action="AddPhone" method="post">
+            <div class="text-danger" asp-validation-summary="All">  </div>
 
             <div class="form-group">
                 <label>Telefon Tipi:</label>
-                <select class="form-control" asp-for="PhoneTypeId">
-
+                <select class="form-control" asp-for="PhoneTypeId"
+                        id="phonetypeselect">
+                    @* <option value="0">Diğer</option>
                     @foreach (PhoneTypeViewModel item in ViewBag.PhoneTypes)
                     {
-                     <option value="@item.Id">@item.Name</option>   
+                    if(ViewBag.FirstPhoneTypeId==item.Id)
+                    {
+                    <option value="@item.Id" selected>@item.Name</option>
                     }
-                </select>
-            </div><br />
+                    else
+                    {
+                    <option value="@item.Id">@item.Name</option>
+                    }
+                    }*@
+
+                    
+                    @foreach (PhoneTypeViewModel item in ViewBag.PhoneTypes)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                    <option value="254">Diğer</option>
+
+
+                </select> <br />
+
+                <input type="text" class="form-control" id="anotherphonetype"
+                       placeholder="Telefon tipi giriniz..." asp-for="AnotherPhoneTypeName" />
+
+            </div> <br />
 
             <div class="form-group">
                 <label>İsim Soyisim:</label>
-                <input type="text" class="form-control" asp-for="FriendNameSurname" required />
-            </div><br />
+                <input type="text" class="form-control" asp-for="FriendNameSurname"
+                       required />
+            </div> <br />
 
-            <div class="form-group">
+            <div class="form-group row">
                 <label>Telefon:</label>
-                <div class="form-group row">
-                    <label>Telefon:</label>
-                    <div class="col-3">
-                        <select class="form-control" asp-for="CountryCode">
-                            <option value="+01">+01 USA</option>
-                            <option value="+33">+33 FR</option>
-                            <option value="+44">+44 UK</option>
-                            <option value="+49">+49 DE</option>
-                            <option value="+90">+90 TR</option>
-                        </select>
-                    </div>
-                    <div class="col-9">
+                <div class="col-3">
+                    <select class="form-control" asp-for="CountryCode">
 
-                        <input type="text" class="form-control" asp-for="Phone"
-                               required />
-                    </div>
-                </div> <br />
-             
+                        <option value="+90">+90 TÜRKİYE</option>
+                        <option value="+01">+01 AMERİKA</option>
+                        <option value="+44">+44 İNGİLTERE</option>
+                    </select>
+                </div>
+                <div class="col-9">
+
+                    <input type="text" class="form-control" asp-for="Phone"
+                           required />
+                </div>
+            </div> <br />
 
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">KAYDET</button>
-            </div><br />
+                <button type="submit"
+                        class="btn btn-primary container">
+                    KAYDET
+                </button>
+            </div> <br />
             <input type="hidden" asp-for="MemberId" />
 
         </form>
-
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            if (@ViewBag.PhoneTypes.Count== 0) {
+                $("#anotherphonetype").prop('disabled', false); //input aktif
+                $("#phonetypeselect").prop('disabled', true); //combo pasif
+            }
+            else {
+                //$("#anotherphonetype").prop('disabled', true); //input pasif
+                //$("#phonetypeselect").prop('disabled', false); //combo aktif
+
+                //selected valueyu ayarlama
+                //pır pır komut
+               // $("#phonetypeselect").val(@ViewBag.FirstPhoneTypeId).change();
+
+                var selectedOption = $("#phonetypeselect").val();
+                ChangeInputDisable(selectedOption);
+            }
+
+            $("#phonetypeselect").on("change", function () {
+                //combodan seçim yapıldığnda bu fonk çalışacak
+                $("anotherphonetype").val(''); //temizlik
+                //combodan neti seçtiğine bakalım
+                //var selectedOption=$("#phonetypeselect").val();
+                var selectedOption = $(this).val(); //this keywordü phonetypeseşect oluyor
+                ChangeInputDisable(selectedOption);
+            }); // phonetypeselect change biti
+
+
+
+            function ChangeInputDisable(optionValue) {
+                if (optionValue == 254) // combodan diğeri seçti
+                {
+                    $("#anotherphonetype").prop('disabled', false); // input aktif
+                }
+                else {
+                    $("#anotherphonetype").prop('disabled', true); // input pasif
+                }
+
+            } // ChangeInputDisable fonk. burda bitti
+
+
+        }); // document ready burada bitti
+
+    </script>
+}
+
 
