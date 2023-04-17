@@ -25,11 +25,11 @@ namespace PhoneBookUI.Areas.Admin.Components
                 AdminLeftMenuDataCountModel model = new AdminLeftMenuDataCountModel()
                 {
                     //toplam uye sayisi TempData["TotalMEmberCount"]
-                    TotalMemberCount=_memberManager.GetAll().Data.Count,
+                    TotalMemberCount = _memberManager.GetAll().Data.Count,
                     //toplam telefon tipi sayisi
-                    TotalPhoneTypeCount=_phoneTypeManager.GetAll().Data.Count,
+                    TotalPhoneTypeCount = _phoneTypeManager.GetAll().Data.Count,
                     //toplam numara sayisi
-                    TotalContactNumberCount=_memberPhoneManager.GetAll().Data.Count
+                    TotalContactNumberCount = _memberPhoneManager.GetAll().Data.Count
                 };
 
                 return View(model);
