@@ -57,6 +57,13 @@ app.UseRouting(); //home7indexe gidebilmesi icin
 app.UseAuthentication();//Login ve Logout islemlerimiz icin
 app.UseAuthorization(); // Yetkilendirme icin
 
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Dashboard}/{id?}"
+    );//Area route default pattern
+
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"); // route' default pattern vermek icin
