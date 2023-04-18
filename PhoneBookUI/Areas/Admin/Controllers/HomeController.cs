@@ -31,12 +31,12 @@ namespace PhoneBookUI.Areas.Admin.Controllers
             //bu ay sisteme eklenen numara sayisi
             ViewBag.MontlyMemberCount = _memberPhoneManager.GetAll(x => x.CreatedDate > thisMonth.AddDays(-1)).Data.Count();
 
-            var members = _memberManager.GetAll().Data;
-            //en son eklenen adi soyadi
+            var members = _memberManager.GetAll().Data.OrderBy(x=>x.CreatedDate);
+            //en son eklenen uyenin adi soyadi
             ViewBag.LastMember = $"{members.LastOrDefault()?.Name} {members.LastOrDefault()?.Surname}";
 
             //Rehbere en son eklenen kisinin adi soyadi
-            var contacts = _memberPhoneManager.GetAll().Data;
+            var contacts = _memberPhoneManager.GetAll().Data.OrderBy(x => x.CreatedDate);
 
             ViewBag.LastContact = contacts.LastOrDefault()?.FriendNameSurname;
 
