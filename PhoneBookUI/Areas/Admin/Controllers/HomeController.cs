@@ -31,7 +31,7 @@ namespace PhoneBookUI.Areas.Admin.Controllers
             //bu ay sisteme eklenen numara sayisi
             ViewBag.MontlyMemberCount = _memberPhoneManager.GetAll(x => x.CreatedDate > thisMonth.AddDays(-1)).Data.Count();
 
-            var members = _memberManager.GetAll().Data.OrderBy(x=>x.CreatedDate);
+            var members = _memberManager.GetAll().Data.OrderBy(x => x.CreatedDate);
             //en son eklenen uyenin adi soyadi
             ViewBag.LastMember = $"{members.LastOrDefault()?.Name} {members.LastOrDefault()?.Surname}";
 
@@ -42,7 +42,7 @@ namespace PhoneBookUI.Areas.Admin.Controllers
 
             return View();
         }
-        [Route("/admin/GetPhoneTypePieData")] 
+        [Route("/admin/GetPhoneTypePieData")]
         public JsonResult GetPhoneTypePieData()
         {
             try
@@ -62,19 +62,37 @@ namespace PhoneBookUI.Areas.Admin.Controllers
                     }
                 }//foreach bitti.
 
-              
+
                 return Json(new
                 {
                     isSuccess = true,
                     message = "Veriler geldi",
-                    types=model.Keys.ToArray(),
-                    points=model.Values.ToArray()
+                    types = model.Keys.ToArray(),
+                    points = model.Values.ToArray()
                 });
 
             }
             catch (Exception ex)
             {
                 return Json(new { isSuccess = false, message = "Veriler getirilemedi!" });
+            }
+        }
+
+        [HttpGet]
+        [Route("uye")]
+        public IActionResult MemberIndex()
+        {
+            try
+            {
+                var data = _memberManager.GetAll().Data;
+
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError("", "Beklenmedik bir hata oldu!" + ex.Message);
+                return View();
             }
         }
     }

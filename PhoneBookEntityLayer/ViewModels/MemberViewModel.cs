@@ -37,5 +37,6 @@ namespace PhoneBookEntityLayer.ViewModels
         public bool IsRemoved { get; set; }
 
         public string? ForgetPasswordToken { get; set; }
+        public string? Picture { get; set; }
     }
 }

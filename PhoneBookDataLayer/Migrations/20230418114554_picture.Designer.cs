@@ -12,8 +12,8 @@ using PhoneBookDataLayer;
 namespace PhoneBookDataLayer.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230410075429_initializeDB")]
-    partial class initializeDB
+    [Migration("20230418114554_picture")]
+    partial class picture
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,9 @@ namespace PhoneBookDataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte[]>("Salt")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -94,9 +97,10 @@ namespace PhoneBookDataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Phone")
+                    b.Property<string>("Phone")
+                        .IsRequired()
                         .HasMaxLength(13)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<byte>("PhoneTypeId")
                         .HasColumnType("tinyint");
