@@ -5,7 +5,7 @@ namespace PhoneBookUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     //Route("a/[Controller]/[Action]/{id?}")] bu route verildiginde [Action] yazan yere action un tam adiniyazmadan sayfa acilmaz.
-    [Route("a/h")]//bu route verildiginde controller e nasil ulasildigi belirtilir ve action a ulasilma konusundaki kurali action üzerine yazilan kural belirler.
+    [Route("admin")]//bu route verildiginde controller e nasil ulasildigi belirtilir ve action a ulasilma konusundaki kurali action üzerine yazilan kural belirler.
     public class HomeController : Controller
     {
         private readonly IMemberManager _memberManager;
@@ -20,7 +20,7 @@ namespace PhoneBookUI.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        [Route("d")] //Action un ismi cok uzun olabilir url'e action un isminin hepsini yazmak istemezsek action a Route verebiliriz.
+        [Route("dsh")] //Action un ismi cok uzun olabilir url'e action un isminin hepsini yazmak istemezsek action a Route verebiliriz.
         public IActionResult Dashboard()
         {
             //bu ay sisteme kayit olan uye sayisi
@@ -41,6 +41,41 @@ namespace PhoneBookUI.Areas.Admin.Controllers
             ViewBag.LastContact = contacts.LastOrDefault()?.FriendNameSurname;
 
             return View();
+        }
+        [Route("/admin/GetPhoneTypePieData")] 
+        public JsonResult GetPhoneTypePieData()
+        {
+            try
+            {
+                Dictionary<string, int> model = new Dictionary<string, int>();//iki data tutmamiz gerektigi icin dictionary kullaniyoruz.
+                var data = _memberPhoneManager.GetAll().Data;
+                foreach (var item in data)
+                {
+                    if (model.ContainsKey(item.PhoneType.Name))//wissen kurs tipinden var mi?
+                    {
+                        //sayiyi 1 arttirsin
+                        model[item.PhoneType.Name] += 1;
+                    }
+                    else
+                    {
+                        model.Add(item.PhoneType.Name, 1);
+                    }
+                }//foreach bitti.
+
+              
+                return Json(new
+                {
+                    isSuccess = true,
+                    message = "Veriler geldi",
+                    types=model.Keys.ToArray(),
+                    points=model.Values.ToArray()
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isSuccess = false, message = "Veriler getirilemedi!" });
+            }
         }
     }
 }
